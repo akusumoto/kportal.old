@@ -1,4 +1,20 @@
 <p>events works!</p>
-<div [class.alternate-button]="isAlternateMode">
-  <button mat-button>Sample</button>
-</div>
+<ul>
+   <li *ngFor='let event of events'>
+     {{event.name}}
+   </li>
+</ul>
+
+<mat-table [dataSource]="events" class='mat-elevation-z8'>
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+    <mat-cell *matCellDef="let event">{{event.id}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-cell *matCellDef="let event">{{event.name}}</mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayColumns"></mat-row>
+</mat-table>
+

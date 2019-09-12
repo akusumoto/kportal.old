@@ -1,5 +1,10 @@
-<ul>
-  <li><a routerLink='/events'>Event List</a></li>
-</ul>
-
-<router-outlet></router-outlet>
+<mat-toolbar color='primary' class='fixed-header'>
+  <mat-toolbar-row>
+          <!--<span><img src='./assets/logo_transparent.png' alt='K-Portal' title='K-Portal' style='height:100px;'/></span>-->
+    <span>K-Portal</span>
+    <a mat-button routerLink='/events' routerLinkActive='active'>Event</a>
+  </mat-toolbar-row>
+</mat-toolbar>
+<main>
+<router-outlet style='margin-top: 80px;'></router-outlet>
+</main>
