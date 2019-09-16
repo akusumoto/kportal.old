@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatNativeDateModule,MatSnackBarModule,MatIconModule,MatDialogModule, MatButtonModule, MatTableModule, MatPaginatorModule , MatSortModule,MatTabsModule, MatCheckboxModule, MatToolbarModule, MatCard, MatCardModule, MatFormField, MatFormFieldModule, MatProgressSpinnerModule, MatInputModule } from  '@angular/material';
+import { MatSidenavModule, MatNativeDateModule,MatSnackBarModule,MatListModule,MatIconModule,MatDialogModule, MatButtonModule, MatTableModule, MatPaginatorModule , MatSortModule,MatTabsModule, MatCheckboxModule, MatToolbarModule, MatCard, MatCardModule, MatFormField, MatFormFieldModule, MatProgressSpinnerModule, MatInputModule } from  '@angular/material';
 import {MatDatepickerModule} from  '@angular/material/datepicker';
 import {MatRadioModule} from  '@angular/material/radio';
 import {MatSelectModule} from  '@angular/material/select';
@@ -12,12 +12,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { EventsComponent } from './events/events.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
+import { EventEditComponent } from './event-edit/event-edit.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    EventsComponent
+    EventsComponent,
+    DashboardComponent,
+    EventDetailComponent,
+    EventEditComponent
   ],
   imports: [
     AppRoutingModule,
@@ -44,7 +50,9 @@ import { EventsComponent } from './events/events.component';
     MatFormFieldModule, 
     MatProgressSpinnerModule, 
     MatInputModule, 
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSidenavModule,
+    MatListModule
   ],
   exports: [
     MatTabsModule,
@@ -68,7 +76,9 @@ import { EventsComponent } from './events/events.component';
     MatFormFieldModule, 
     MatProgressSpinnerModule, 
     MatInputModule, 
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSidenavModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

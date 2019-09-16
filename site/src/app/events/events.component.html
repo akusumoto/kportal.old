@@ -1,14 +1,14 @@
-<p>events works!</p>
-<ul>
-   <li *ngFor='let event of events'>
-     {{event.name}}
-   </li>
-</ul>
+<h1>Event List</h1>
 
+<!--
 <mat-table [dataSource]="events" class='mat-elevation-z8'>
   <ng-container matColumnDef="id">
-    <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
     <mat-cell *matCellDef="let event">{{event.id}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+      <mat-cell *matCellDef="let event">{{event.date | date:"yyyy/MM/dd"}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
@@ -17,4 +17,13 @@
   <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayColumns"></mat-row>
 </mat-table>
+-->
 
+<mat-card *ngFor="let event of events" style="margin:5px;"  routerLink="/event/{{event.id}}">
+  <mat-card-subtitle>{{event.date | date:"yyyy/MM/dd"}}</mat-card-subtitle>
+  <mat-card-title>{{event.name}}</mat-card-title>
+  <mat-card-content>
+    Test Content.
+    AAA
+  </mat-card-content>
+</mat-card>
