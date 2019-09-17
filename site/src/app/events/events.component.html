@@ -21,9 +21,8 @@
 
 <mat-card *ngFor="let event of events" style="margin:5px;"  routerLink="/event/{{event.id}}">
   <mat-card-subtitle>{{event.date | date:"yyyy/MM/dd"}}</mat-card-subtitle>
-  <mat-card-title>{{event.name}}</mat-card-title>
+  <mat-card-title>{{event.subject}}</mat-card-title>
   <mat-card-content>
-    Test Content.
-    AAA
+          {{event.place}} / {{event.detail}} / {{event.owner}}
   </mat-card-content>
 </mat-card>

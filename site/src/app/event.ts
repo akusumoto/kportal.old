@@ -1,5 +1,9 @@
 export class Event {
     id: number;
-    name: string;
     date: Date;
+    place: string;
+    station: string;
+    subject: string;
+    detail: string;
+    owner: string;
 }

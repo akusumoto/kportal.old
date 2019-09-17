@@ -5,14 +5,20 @@
 <ul>
   <li><b>ID:</b> {{event.id}}</li>
   <li><b>Date:</b> {{event.date | date:"yyyy/MM/dd"}}</li>
-  <li><b>Name:</b> {{event.name}}</li>
+  <li><b>Subject:</b> {{event.subject}}</li>
 </ul>
 
 <mat-nav-list>
-  <button mat-icon-button routerLink="/event/edit/{{event.id}}">
+  <button mat-raised-button color="primary" routerLink="/event/edit/{{event.id}}">
+     EDIT
+     <!--
      <mat-icon>create</mat-icon>
+     -->
   </button>
-  <button mat-icon-button (click)="delete(event.id)">
+  <button mat-raised-button color="warn" (click)="delete(event.id)">
+    DELETE
+    <!--
     <mat-icon>delete</mat-icon>
+    -->
   </button>
 </mat-nav-list>

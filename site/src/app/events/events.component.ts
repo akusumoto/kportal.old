@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material';
 export class EventsComponent implements OnInit {
 
   events: Event[];
-  displayColumns = ['id', 'date', 'name'];
+  displayColumns = ['id', 'date', 'subject'];
 
   constructor(private eventService: EventService) { }
 
