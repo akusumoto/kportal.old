@@ -23,15 +23,15 @@ defmodule KPortal.Accounts.User do
     user
     |> cast(attrs, [:account,
                     :password,
+                    :part,
                     :name,
                     :nickname,
-                    :part,
                     :email,
                     :home_address,
                     :work_address,
                     :type,
                     :emergency_number,
                     :note])
-    |> validate_required([:account, :password, :email, :name, :nickname, :type, :part])
+    |> validate_required([:account, :password, :email, :name, :nickname, :part, :type])
   end
 end
