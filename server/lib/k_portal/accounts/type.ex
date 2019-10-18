@@ -2,9 +2,11 @@ defmodule KPortal.Accounts.Type do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias KPortal.Accounts.User
+
   schema "types" do
     field :name, :string
-    has_many :users, KPortal.Accounts.User
+    has_many :users, User
 
     timestamps()
   end

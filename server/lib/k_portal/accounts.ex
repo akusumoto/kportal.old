@@ -5,8 +5,7 @@ defmodule KPortal.Accounts do
 
   import Ecto.Query, warn: false
   alias KPortal.Repo
-
-  alias KPortal.Accounts.User
+  alias KPortal.Accounts.{User, Part, Type}
 
   @doc """
   Returns the list of users.
@@ -50,9 +49,20 @@ defmodule KPortal.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
+    part = get_part!(attrs["part_id"])
+    type = get_type!(attrs["type_id"])
+
+    user0 = Ecto.build_assoc(part, :users)
+    a = Ecto.build_assoc(type, :users, Map.from_struct user0)
+    IO.inspect a
+
+    User.changeset(a, attrs)
     |> Repo.insert()
+
+    #%User{}
+    #|> User.changeset(attrs)
+    #|> Repo.insert()
+
   end
 
   @doc """
