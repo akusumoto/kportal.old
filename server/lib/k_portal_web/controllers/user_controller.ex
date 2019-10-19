@@ -3,6 +3,7 @@ defmodule KPortalWeb.UserController do
 
   alias KPortal.Accounts
   alias KPortal.Accounts.User
+  alias KPortal.Repo
 
   action_fallback KPortalWeb.FallbackController
 
@@ -13,6 +14,7 @@ defmodule KPortalWeb.UserController do
 
   def create(conn, user_params) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+      user = user |> Repo.preload(:part) |> Repo.preload(:type)
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.user_path(conn, :show, user))

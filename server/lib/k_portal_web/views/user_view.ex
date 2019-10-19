@@ -11,18 +11,21 @@ defmodule KPortalWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
+    """
     %{id: user.id,
-      part: user.part,
-      nickname: user.nickname,
       account: user.account,
       password: user.password,
       name: user.name,
+      nickname: user.nickname,
       email: user.email,
+      part: user.part, #%{id: user.part.id, name: user.part.name},
+      type: user.type, #%{id: user.type.id, name: user.type.name},
       home_address: user.home_address,
       work_address: user.work_address,
-      type: user.type,
       emergency_number: user.emergency_number,
       note: user.note
     }
+    """
+    user
   end
 end

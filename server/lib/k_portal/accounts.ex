@@ -17,7 +17,11 @@ defmodule KPortal.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+#    Repo.all(User)
+    Repo.all from u in User,
+      join: p in assoc(u, :part),
+      join: t in assoc(u, :type),
+      preload: [part: p, type: t]
   end
 
   @doc """
@@ -34,7 +38,22 @@ defmodule KPortal.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+#    Repo.get!(User, id)
+    from(u in User,
+      join: p in assoc(u, :part),
+      join: t in assoc(u, :type),
+      preload: [part: p, type: t])
+    |> Repo.get!(id)
+  end
+
+  def update_part_id(attrs, part_id) do
+    %{attrs | part_id: part_id }
+  end
+
+  def update_type_id(attrs, type_id) do
+    %{attrs | type_id: type_id }
+  end
 
   @doc """
   Creates a user.
@@ -49,15 +68,29 @@ defmodule KPortal.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    part = get_part!(attrs["part_id"])
-    type = get_type!(attrs["type_id"])
-
-    user0 = Ecto.build_assoc(part, :users)
-    a = Ecto.build_assoc(type, :users, Map.from_struct user0)
-    IO.inspect a
-
-    User.changeset(a, attrs)
+    %User{}
+    |> update_part_id(attrs["part_id"])
+    |> update_type_id(attrs["type_id"])
+    |> User.changeset(attrs)
     |> Repo.insert()
+
+    #user_tmp = attrs["part_id"]
+    #            |> get_part!()
+    #            |> Ecto.build_assoc(:users)
+    #attrs["type_id"]
+    #|> get_type!()
+    #|> Ecto.build_assoc(:users, Map.from_struct user_tmp)
+    #|> User.changeset(attrs)
+    #|> Repo.insert()
+
+    #part = get_part!(attrs["part_id"])
+    #type = get_type!(attrs["type_id"])
+    #
+    #user0 = Ecto.build_assoc(part, :users)
+    #a = Ecto.build_assoc(type, :users, Map.from_struct user0)
+    #
+    #User.changeset(a, attrs)
+    #|> Repo.insert()
 
     #%User{}
     #|> User.changeset(attrs)
