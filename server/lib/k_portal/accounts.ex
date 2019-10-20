@@ -68,9 +68,13 @@ defmodule KPortal.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
+    attrs = attrs
+      |> Map.put("part_id", attrs["part"]["id"])
+      |> Map.put("type_id", attrs["type"]["id"])
+      |> Map.delete("part")
+      |> Map.delete("type")
+
     %User{}
-    |> update_part_id(attrs["part_id"])
-    |> update_type_id(attrs["type_id"])
     |> User.changeset(attrs)
     |> Repo.insert()
 

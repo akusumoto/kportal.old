@@ -20,6 +20,7 @@ defmodule KPortal.MixProject do
   def application do
     [
       mod: {KPortal.Application, []},
+      applications: [:guardian],
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -40,7 +41,8 @@ defmodule KPortal.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:guardian, "~> 2.0"}
     ]
   end
 
