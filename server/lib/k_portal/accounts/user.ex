@@ -33,6 +33,16 @@ defmodule KPortal.Accounts.User do
     user
     |> cast(attrs, @input)
     |> validate_required(@required)
+    |> generate_password_hash
+  end
+
+  defp generate_password_hash(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
+        put_change(changeset, :password, Comeonin.Bcrypt.hashpwsalt(password))
+      _ ->
+        changeset
+    end
   end
 end
 

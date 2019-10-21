@@ -26,7 +26,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :guardian, Guardian,
-  issuer: "KPortalId",
+  issuer: "KPortalWebId",
   secret_key: Mix.env(),
   serializer: KPortal.GuardianSerializer
 
