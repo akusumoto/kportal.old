@@ -20,8 +20,8 @@ defmodule KPortal.MixProject do
   def application do
     [
       mod: {KPortal.Application, []},
-      applications: [:guardian],
-      extra_applications: [:logger, :runtime_tools]
+      #applications: [:guardian],
+      extra_applications: [:logger, :runtime_tools, :guardian]
     ]
   end
 

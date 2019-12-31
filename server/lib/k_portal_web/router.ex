@@ -24,7 +24,7 @@ defmodule KPortalWeb.Router do
   end
 
   scope "/", KPortalWeb do
-    pipe_through([:api, :auth, :authed_access])
+    pipe_through [:api, :auth, :authed_access]
 
     get  "/part", PartController, :index
     post "/part", PartController, :create
