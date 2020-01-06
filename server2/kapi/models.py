@@ -44,3 +44,7 @@ class User(models.Model):
     emergency_phone = models.CharField(max_length=15, null=True)
     note = models.TextField(null=True)
 
+    def __repr__(self):
+        return "{} ({})".format(self.username, self.nickname)
+
+    __str__ = __repr__
