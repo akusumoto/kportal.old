@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import User as us, Type as tp, Part as pt, UserStatus as st
+from .models import UserInfo as ui, Type as tp, Part as pt, UserStatus as st, AccessToken as at
 
-# Register your models here.
-@admin.register(us)
-class User(admin.ModelAdmin):
+@admin.register(ui)
+class UserInfo(admin.ModelAdmin):
     pass
 
 @admin.register(pt)
@@ -16,4 +15,8 @@ class Type(admin.ModelAdmin):
 
 @admin.register(st)
 class UserStatus(admin.ModelAdmin):
+    pass
+
+@admin.register(at)
+class AccessToken(admin.ModelAdmin):
     pass

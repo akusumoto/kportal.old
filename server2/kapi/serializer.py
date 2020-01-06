@@ -1,6 +1,8 @@
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
-from .models import User, Part, Type, UserStatus
+from .models import UserInfo, Part, Type, UserStatus
 
 class UserStatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,14 +19,15 @@ class TypeSerializer(serializers.ModelSerializer):
         model = Type
         fields = ('id', 'name')
 
-class UserSerializer(serializers.ModelSerializer):
+class UserInfoSerializer(serializers.ModelSerializer):
+    #user = UserSerializer(read_only=True)
     part = PartSerializer(read_only=True)
     type = TypeSerializer(read_only=True)
     status = UserStatusSerializer(read_only=True)
 
     class Meta:
-        model = User
-        fields = ('id', 'username', 'password', 'email', 'status',
+        model = UserInfo
+        fields = ('id', 'user', 'status',
                   'name', 'nickname', 'home_address', 'work_address', 
                   'part', 'type', 'emergency_phone', 'note')
         #read_only_fields = ('status', 'part', 'type')
