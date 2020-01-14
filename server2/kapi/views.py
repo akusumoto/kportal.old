@@ -1,33 +1,52 @@
-from django.shortcuts import render
-from django.http.response import JsonResponse
-from django.contrib.auth.models import User
-import django_filters
-
-from rest_framework import viewsets, filters, views
-
-from .models import UserInfo, Type, Part, UserStatus, AccessToken
-from .serializer import UserInfoSerializer, PartSerializer, TypeSerializer, UserStatusSerializer
+"""
+views
+"""
 
 import json
 
+from django.http.response import JsonResponse
+from rest_framework import viewsets, views
+
+from .models import User, Type, Part, UserStatus, AccessToken
+from .serializer import UserSerializer, PartSerializer, TypeSerializer, UserStatusSerializer
+
 class UserStatusViewSet(viewsets.ModelViewSet):
+    """
+    UserStatusViewSet
+    """
     queryset = UserStatus.objects.all()
     serializer_class = UserStatusSerializer
 
-class UserInfoViewSet(viewsets.ModelViewSet):
-    queryset = UserInfo.objects.all()
-    serializer_class = UserInfoSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    UserViewSet
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class PartViewSet(viewsets.ModelViewSet):
+    """
+    PartViewSet
+    """
     queryset = Part.objects.all()
     serializer_class = PartSerializer
 
 class TypeViewSet(viewsets.ModelViewSet):
+    """
+    TypeViewSet
+    """
     queryset = Type.objects.all()
     serializer_class = TypeSerializer
 
 class Login(views.APIView):
-    def post(self, request, format=None):
+    """
+    Login
+    """
+
+    def post(self, request):
+        """
+        POST method
+        """
         try:
             data = json.loads(request.body)
             username = data['username']
@@ -46,5 +65,3 @@ class Login(views.APIView):
         token = AccessToken.create(user)
 
         return JsonResponse({'token': token.token})
-
-

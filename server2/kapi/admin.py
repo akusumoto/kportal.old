@@ -1,22 +1,36 @@
-from django.contrib import admin
-from .models import UserInfo as ui, Type as tp, Part as pt, UserStatus as st, AccessToken as at
+"""
+admin
+"""
 
-@admin.register(ui)
-class UserInfo(admin.ModelAdmin):
-    pass
+from django.contrib import admin
+from .models import User as us, Type as tp, Part as pt, UserStatus as st, AccessToken as at
+
+@admin.register(us)
+class User(admin.ModelAdmin):
+    """
+    User ModelAdmin
+    """
 
 @admin.register(pt)
 class Part(admin.ModelAdmin):
-    pass
+    """
+    Part ModelAdmin
+    """
 
 @admin.register(tp)
 class Type(admin.ModelAdmin):
-    pass
+    """
+    Type ModelAdmin
+    """
 
 @admin.register(st)
 class UserStatus(admin.ModelAdmin):
-    pass
+    """
+    User ModelAdmin
+    """
 
 @admin.register(at)
 class AccessToken(admin.ModelAdmin):
-    pass
+    """
+    AccessToken ModelAdmin
+    """

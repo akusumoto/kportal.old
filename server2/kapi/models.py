@@ -1,10 +1,15 @@
-from django.db import models
-from django.utils import timezone
-from django.contrib.auth.models import User
+"""
+models
+"""
 
 import hashlib
+from django.db import models
+from django.utils import timezone
 
 class UserStatus(models.Model):
+    """
+    UserStatus Model
+    """
     id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=10)
 
@@ -15,6 +20,9 @@ class UserStatus(models.Model):
 
 
 class Part(models.Model):
+    """
+    Part Model
+    """
     id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=10)
 
@@ -24,6 +32,9 @@ class Part(models.Model):
     __str__ = __repr__
 
 class Type(models.Model):
+    """
+    Type Model
+    """
     id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=10)
 
@@ -32,8 +43,14 @@ class Type(models.Model):
 
     __str__ = __repr__
 
-class UserInfo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class User(models.Model):
+    """
+    User Model
+    """
+
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+    email = models.CharField(max_length=256)
     name = models.CharField(max_length=50)
     nickname = models.CharField(max_length=100)
     status = models.ForeignKey("UserStatus", on_delete=models.SET_NULL, null=True)
@@ -45,33 +62,38 @@ class UserInfo(models.Model):
     note = models.TextField(null=True)
 
     def __repr__(self):
-        return "{} ({})".format(self.user.username, self.nickname)
+        return "{} ({})".format(self.username, self.nickname)
 
     __str__ = __repr__
 
 class AccessToken(models.Model):
+    """
+    AccessTOken Model
+    """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=40)
     access_datetime = models.DateTimeField()
 
     @staticmethod
     def create(user: User):
+        """
+        creat a access token
+        """
+
         if AccessToken.objects.filter(user=user).exists():
-            AccessToekn.objects.get(user=user).delete()
+            AccessToken.objects.get(user=user).delete()
 
-        dt = timezone.now()
-        str = "THanKS" + user.username + "K!" + user.password + dt.strftime("%F%m%d%H%M%S%f")
-        hash = hashlib.sha1(str.encode('utf-8')).hexdigest()
+        now = timezone.now()
+        token_str = "THanKS" + user.username + "K!" + user.password + now.strftime("%F%m%d%H%M%S%f")
+        token = hashlib.sha1(token_str.encode('utf-8')).hexdigest()
 
-        token = AccessToken.objects.create(
-                user = user,
-                token = hash,
-                access_datetime = dt)
+        access_token = AccessToken.objects.create(user=user, token=token, access_datetime=now)
 
-        return token
+        return access_token
 
     def __repr__(self):
-        dt = timezone.localtime(self.access_datetime).strftime("%Y/%m/%d %H:%M:%S") 
-        return "{} ({}) - {}".forma(self.user.username, dt, self.token)
+        time = timezone.localtime(self.access_datetime).strftime("%Y/%m/%d %H:%M:%S")
+        return "{} ({}) - {}".format(self.user.username, time, self.token)
 
     __str__ = __repr__
