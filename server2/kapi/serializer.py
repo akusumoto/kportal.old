@@ -39,6 +39,9 @@ class UserSerializer(serializers.ModelSerializer):
     type = TypeSerializer(read_only=True)
     status = UserStatusSerializer(read_only=True)
 
+    def create(self, validated_data):
+        return User.objects.create_user(request_data=validated_data)
+    
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'email', 'status',
@@ -46,5 +49,3 @@ class UserSerializer(serializers.ModelSerializer):
                   'part', 'type', 'emergency_phone', 'note')
         #read_only_fields = ('status', 'part', 'type')
 
-    def create(self, validated_data):
-        return User.objects.create_user(request_data=validated_data)

@@ -10,14 +10,29 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 class UserManager(BaseUserManager):
+    """
+    UserManager
+    """
     def create_user(self, request_data, **_kwargs):
         now = timezone.now()
         if not request_data['username']:
             raise ValueError('Users must have an username.')
 
+        try:
+            part = Part.objects.get(request_data["part"]["id"])
+        except:
+            part = None
+        
         user = self.model(
             username=request_data['username'],
             email=self.normalize_email(request_data['email']),
+            name=request_data['name'],
+            nickname=request_data['nickname'],
+            home_address=(request_data['home_address'] if 'home_address' in request_data else None),
+            work_address=(request_data['work_address'] if 'work_address' in request_data else None),
+            emergency_phone=(request_data['emergency_phone'] if 'emergency_phone' in request_data else None),
+            note=(request_data['note'] if 'note' in request_data else None),
+            part=part,
             is_active=True,
             last_login=now,
             date_joined=now

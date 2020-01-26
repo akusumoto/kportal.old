@@ -13,6 +13,9 @@ from .serializer import UserSerializer, PartSerializer, TypeSerializer, UserStat
 
 # ユーザ作成のView(POST)
 class AuthRegister(generics.CreateAPIView):
+    """
+    AuthRegister
+    """
     permission_classes = (permissions.AllowAny,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -29,6 +32,7 @@ class UserStatusViewSet(viewsets.ModelViewSet):
     """
     UserStatusViewSet
     """
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = UserStatus.objects.all()
     serializer_class = UserStatusSerializer
 
@@ -36,6 +40,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     UserViewSet
     """
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -43,6 +48,7 @@ class PartViewSet(viewsets.ModelViewSet):
     """
     PartViewSet
     """
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Part.objects.all()
     serializer_class = PartSerializer
 
@@ -50,5 +56,6 @@ class TypeViewSet(viewsets.ModelViewSet):
     """
     TypeViewSet
     """
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Type.objects.all()
     serializer_class = TypeSerializer
