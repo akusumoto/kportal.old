@@ -2,13 +2,28 @@
 views
 """
 
-import json
+from django.db import transaction
 
-from django.http.response import JsonResponse
-from rest_framework import viewsets, views
+from rest_framework import viewsets, status, permissions, generics
+from rest_framework.response import Response
 
-from .models import User, Type, Part, UserStatus, AccessToken
+from .models import User, Type, Part, UserStatus
 from .serializer import UserSerializer, PartSerializer, TypeSerializer, UserStatusSerializer
+
+
+# ユーザ作成のView(POST)
+class AuthRegister(generics.CreateAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    @transaction.atomic
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserStatusViewSet(viewsets.ModelViewSet):
     """
@@ -37,31 +52,3 @@ class TypeViewSet(viewsets.ModelViewSet):
     """
     queryset = Type.objects.all()
     serializer_class = TypeSerializer
-
-class Login(views.APIView):
-    """
-    Login
-    """
-
-    def post(self, request):
-        """
-        POST method
-        """
-        try:
-            data = json.loads(request.body)
-            username = data['username']
-            password = data['password']
-        except:
-            return JsonResponse({'message':'invalid JSON'}, status=400)
-
-        if not User.objects.filter(username=username).exists():
-            return JsonResponse({'message':'login failure'}, status=403)
-
-        user = User.objects.get(username=username)
-
-        if not user.check_password(password):
-            return JsonResponse({'message':'login failure'}, status=403)
-
-        token = AccessToken.create(user)
-
-        return JsonResponse({'token': token.token})

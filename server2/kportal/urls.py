@@ -15,12 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_jwt.views import obtain_jwt_token
 
 #from kapi.urls import router as kapi_router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework.urls')),
+    path('login/', obtain_jwt_token),
+    #path('auth/', include('rest_framework.urls')),
+    #path('auth/', include('social_django.urls', namespace='social')),
     #path('api/', include(kapi_router.urls)),
     path('api/', include('kapi.urls')),
 ]

@@ -3,7 +3,7 @@ admin
 """
 
 from django.contrib import admin
-from .models import User as us, Type as tp, Part as pt, UserStatus as st, AccessToken as at
+from .models import User as us, Type as tp, Part as pt, UserStatus as st
 
 @admin.register(us)
 class User(admin.ModelAdmin):
@@ -27,10 +27,4 @@ class Type(admin.ModelAdmin):
 class UserStatus(admin.ModelAdmin):
     """
     User ModelAdmin
-    """
-
-@admin.register(at)
-class AccessToken(admin.ModelAdmin):
-    """
-    AccessToken ModelAdmin
     """
