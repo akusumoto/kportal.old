@@ -42,11 +42,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password, **_extra_fields):
+    def create_superuser(self, username, email, password, **extra_fields):
         request_data = {
             'username': username,
             'email': email,
-            'password': password
+            'password': password,
+            'name': extra_fields['name'],
+            'nickname': extra_fields['nickname'],
         }
         user = self.create_user(request_data)
         user.is_active = True
@@ -78,7 +80,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['password', 'name', 'nickname']
+    REQUIRED_FIELDS = ['password', 'name', 'nickname', 'email']
 
     def user_has_perm(self, user, perm, obj):
         return _user_has_perm(user, perm, obj)
