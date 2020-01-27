@@ -26,4 +26,5 @@ urlpatterns = [
     #path('auth/', include('social_django.urls', namespace='social')),
     #path('api/', include(kapi_router.urls)),
     path('member/', include('member.urls')),
+    path('events/', include('events.urls')),
 ]
