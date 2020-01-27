@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'kapi',
+    'member',
     'rest_framework',
 #    'social_django',    
 ]
@@ -160,4 +160,4 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
-AUTH_USER_MODEL = 'kapi.User'
+AUTH_USER_MODEL = 'member.User'

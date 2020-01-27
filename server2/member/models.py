@@ -23,6 +23,16 @@ class UserManager(BaseUserManager):
         except:
             part = None
         
+        try:
+            type = Type.objects.get(request_data["type"]["id"])
+        except:
+            type = None
+
+        try:
+            status = UserStatus.objects.get(1) # TODO
+        except:
+            status = None
+        
         user = self.model(
             username=request_data['username'],
             email=self.normalize_email(request_data['email']),
@@ -33,6 +43,8 @@ class UserManager(BaseUserManager):
             emergency_phone=(request_data['emergency_phone'] if 'emergency_phone' in request_data else None),
             note=(request_data['note'] if 'note' in request_data else None),
             part=part,
+            type=type,
+            status=status,
             is_active=True,
             last_login=now,
             date_joined=now

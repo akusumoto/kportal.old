@@ -46,9 +46,9 @@ class Migration(migrations.Migration):
                 ('work_address', models.CharField(max_length=256, null=True)),
                 ('emergency_phone', models.CharField(max_length=15, null=True)),
                 ('note', models.TextField(null=True)),
-                ('part', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='kapi.Part')),
-                ('status', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='kapi.UserStatus')),
-                ('type', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='kapi.Type')),
+                ('part', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='member.Part')),
+                ('status', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='member.UserStatus')),
+                ('type', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='member.Type')),
             ],
         ),
         migrations.CreateModel(
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('token', models.CharField(max_length=40)),
                 ('access_datetime', models.DateTimeField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='kapi.User')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='member.User')),
             ],
         ),
     ]

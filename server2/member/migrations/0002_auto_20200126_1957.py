@@ -7,7 +7,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kapi', '0001_initial'),
+        ('member', '0001_initial'),
     ]
 
     operations = [
