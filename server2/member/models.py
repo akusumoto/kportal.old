@@ -14,43 +14,37 @@ class UserManager(BaseUserManager):
     UserManager
     """
     def create_user(self, request_data, **_kwargs):
+        #print(request_data)
         now = timezone.now()
         if not request_data['username']:
             raise ValueError('Users must have an username.')
 
-        try:
-            part = Part.objects.get(request_data["part"]["id"])
-        except:
-            part = None
-        
-        try:
-            type = Type.objects.get(request_data["type"]["id"])
-        except:
-            type = None
-
-        try:
-            status = UserStatus.objects.get(1) # TODO
-        except:
-            status = None
-        
         user = self.model(
             username=request_data['username'],
             email=self.normalize_email(request_data['email']),
             name=request_data['name'],
             nickname=request_data['nickname'],
-            home_address=(request_data['home_address'] if 'home_address' in request_data else None),
-            work_address=(request_data['work_address'] if 'work_address' in request_data else None),
-            emergency_phone=(request_data['emergency_phone'] if 'emergency_phone' in request_data else None),
-            note=(request_data['note'] if 'note' in request_data else None),
-            part=part,
-            type=type,
-            status=status,
             is_active=True,
             last_login=now,
             date_joined=now
         )
 
         user.set_password(request_data['password'])
+        if 'part' in request_data:
+            user.part = request_data['part']
+        if 'type' in request_data:
+            user.type = request_data['type']
+        if 'status' in request_data:
+            user.status = request_data['status']
+        if 'home_address' in request_data:
+            home_address = request_data['home_address']
+        if 'work_address' in request_data:
+            work_address = request_data['work_address']
+        if 'emergency_phone' in request_data:
+            emergency_phone = request_data['emergency_phone']
+        if 'note' in request_data:
+            note = request_data['note']
+
         user.save(using=self._db)
         return user
 
@@ -69,6 +63,44 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+PART = [
+    ('vn1', '1st Violin'),
+    ('vn2', '2nd Violin'),
+    ('va', 'Viola'),
+    ('vc', 'Cello'),
+    ('cb', 'Contrabass'),
+    ('fl', 'Flute'),
+    ('cl', 'Clarinet'),
+    ('sax', 'Saxophone'),
+    ('ob', 'Oboe'),
+    ('fg', 'Fagotto'),
+    ('tp', 'Trumpet'),
+    ('tb', 'Trombone'),
+    ('tu', 'Tuba'),
+    ('gt', 'Guitar'),
+    ('pf', 'Piano'),
+    ('syn', 'Synchesizer'),
+    ('bs', 'Electric Bass'),
+    ('cho-sp', 'Chorus Soprano'),
+    ('cho-al', 'Chorus Alto'),
+    ('cho-tn', 'Chorus Tenor'),
+    ('cho-bs', 'Chorus Bass'),
+    ('cond', 'Conductor'),
+    ('staff', 'Staff'),
+]
+
+TYPE = [
+    ('adult', '社会人'),
+    ('student', '学生'),
+]
+
+STATUS = [
+    ('active', '在籍中'),
+    ('rest', '休団中'),
+    ('left', '退団'),
+    ('ghost', '幽霊団員'),
+]
+
 class User(AbstractBaseUser):
     '''User Model'''
 
@@ -77,11 +109,11 @@ class User(AbstractBaseUser):
     email = models.CharField(max_length=256)
     name = models.CharField(max_length=50)
     nickname = models.CharField(max_length=100)
-    status = models.ForeignKey("UserStatus", on_delete=models.SET_NULL, null=True)
     home_address = models.CharField(max_length=256, null=True)
     work_address = models.CharField(max_length=256, null=True)
-    part = models.ForeignKey("Part", on_delete=models.SET_NULL, null=True)
-    type = models.ForeignKey("Type", on_delete=models.SET_NULL, null=True)
+    status = models.CharField(max_length=6, choices=STATUS, default='active')
+    part = models.CharField(max_length=6, choices=PART, default='staff')
+    type = models.CharField(max_length=7, choices=TYPE, default='adult')
     emergency_phone = models.CharField(max_length=15, null=True)
     note = models.TextField(null=True)
     is_active   = models.BooleanField(default=True)
@@ -109,43 +141,6 @@ class User(AbstractBaseUser):
 
     def __repr__(self):
         return "[{}] {} ({})".format(self.id, self.username, self.nickname)
-
-    __str__ = __repr__
-
-class UserStatus(models.Model):
-    """
-    UserStatus Model
-    """
-    id = models.IntegerField(primary_key=True, unique=True)
-    name = models.CharField(max_length=10)
-
-    def __repr__(self):
-        return "{}".format(self.name)
-
-    __str__ = __repr__
-
-
-class Part(models.Model):
-    """
-    Part Model
-    """
-    id = models.IntegerField(primary_key=True, unique=True)
-    name = models.CharField(max_length=10)
-
-    def __repr__(self):
-        return "{}".format(self.name)
-
-    __str__ = __repr__
-
-class Type(models.Model):
-    """
-    Type Model
-    """
-    id = models.IntegerField(primary_key=True, unique=True)
-    name = models.CharField(max_length=10)
-
-    def __repr__(self):
-        return "{}".format(self.name)
 
     __str__ = __repr__
 
