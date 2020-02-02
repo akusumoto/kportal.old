@@ -2,9 +2,7 @@
 Event View
 """
 
-from django.db import transaction
-from django.shortcuts import render
-from rest_framework import viewsets, status, permissions, generics
+from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 
 from .models import Event, EventAnswer, EventUser
@@ -19,6 +17,9 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
 
     def create(self, request):
+        """
+        create
+        """
         serializer = EventSerializer(data=request.data)
         if serializer.is_valid():
             event = serializer.save(owner=request.user)

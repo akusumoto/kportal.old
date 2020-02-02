@@ -7,23 +7,13 @@ from member.serializer import UserSerializer
 from .models import Event, EventAnswer, EventUser
 
 
-class EventAnswerSerializer(serializers.ModelSerializer):
-    """
-    EventAnswerSerializer
-    """
-    #event = EventSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = EventAnswer
-        fields = '__all__'
 
 class EventSerializer(serializers.ModelSerializer):
     """
     EventSerializer
     """
     owner = UserSerializer(read_only=True)
-    answers = EventAnswerSerializer(many=True)
+    #answers = EventAnswerSerializer(many=True)
 
     """
     def create(self, validated_data):
@@ -36,8 +26,18 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'date', 'place', 'subject', 'detail', 'owner', 'answers')
+        fields = ('id', 'date', 'place', 'subject', 'detail', 'owner')
 
+class EventAnswerSerializer(serializers.ModelSerializer):
+    """
+    EventAnswerSerializer
+    """
+    event = EventSerializer(read_only=True)
+
+    class Meta:
+        model = EventAnswer
+        fields = ('id','event','value')
+        read_only_fields = ('event',)
 
 class EventUserSerializer(serializers.ModelSerializer):
     """
