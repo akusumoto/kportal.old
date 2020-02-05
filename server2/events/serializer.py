@@ -15,7 +15,6 @@ class EventAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventAnswer
         fields = ('id','value')
-        #read_only_fields = ('event',)
 
 
 class EventUserSerializer(serializers.ModelSerializer):
@@ -28,7 +27,7 @@ class EventUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EventUser
-        fields = ('id', 'user')
+        fields = ('id', 'user', 'answer', 'comment')
 
 class EventSerializer(serializers.ModelSerializer):
     """
@@ -36,7 +35,7 @@ class EventSerializer(serializers.ModelSerializer):
     """
     owner = UserSerializer(read_only=True)
     answers = serializers.SerializerMethodField()
-    users = serializers.SerializerMethodField(read_only=True)
+    users = serializers.SerializerMethodField()
 
     """
     def create(self, validated_data):

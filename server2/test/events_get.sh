@@ -1,0 +1,7 @@
+#!/bin/sh
+
+token=`cat .login | jq -r .token`
+
+curl -X GET -H 'Content-Type: application/json' \
+        -H "Authorization: JWT ${token}" \
+        http://localhost:8000/events/
