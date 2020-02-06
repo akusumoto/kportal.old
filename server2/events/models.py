@@ -37,4 +37,6 @@ class EventUser(models.Model):
     answer = models.ForeignKey("EventAnswer", on_delete=models.SET_NULL, null=True)
     comment = models.CharField(max_length=1024, null=True)
 
+    class Meta:
+        unique_together = (("event","user"))
 

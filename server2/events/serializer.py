@@ -29,6 +29,34 @@ class EventUserSerializer(serializers.ModelSerializer):
         model = EventUser
         fields = ('id', 'user', 'answer', 'comment')
 
+class EventUserFlattenSerializer(serializers.ModelSerializer):
+    """
+    EventUserFlattenSerializer
+    """
+    id = serializers.SerializerMethodField(read_only=True)
+    #email = serializers.SerializerMethodField(read_only=True)
+    nickname = serializers.SerializerMethodField(read_only=True)
+    username = serializers.SerializerMethodField(read_only=True)
+    answer = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = EventUser
+        fields = ('id', 'nickname', 'username', 'answer', 'comment')
+
+    def get_id(self, obj):
+        return obj.user.id
+
+    def get_nickname(self, obj):
+        return obj.user.nickname
+
+    def get_username(self, obj):
+        return obj.user.username
+
+    def get_answer(self, obj):
+        if obj.answer:
+            return obj.answer.value
+        return None
+
 class EventSerializer(serializers.ModelSerializer):
     """
     EventSerializer
@@ -59,7 +87,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_users(self, obj):
         try:
-            users = EventUserSerializer(EventUser.objects.filter(event=Event.objects.get(id=obj.id)), many=True).data
+            users = EventUserFlattenSerializer(EventUser.objects.filter(event=Event.objects.get(id=obj.id)), many=True).data
             return users
         except:
             return None

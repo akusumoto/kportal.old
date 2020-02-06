@@ -13,10 +13,10 @@ ROUTER.register('users', EventUserViewSet)
 ROUTER.register('', EventViewSet)
 
 urlpatterns = [
-    path('<int:event_id>/answers/', EventAnswerViewSet.as_view({"get":"list", "post":"create"})),
     path('<int:event_id>/answers/<int:pk>/', EventAnswerViewSet.as_view({"get":"retrieve", "put":"update", "delete":"destroy"})),
+    path('<int:event_id>/answers/', EventAnswerViewSet.as_view({"get":"list", "post":"create"})),
+    path('<int:event_id>/users/<int:user_id>/', EventUserViewSet.as_view({"get":"retrieve", "put":"update", "delete":"destroy"})),
     path('<int:event_id>/users/', EventUserViewSet.as_view({"get":"list", "post":"create"})),
-    path('<int:event_id>/users/<int:pk>/', EventUserViewSet.as_view({"get":"retrieve", "put":"update", "delete":"destroy"})),
     path('', include(ROUTER.urls)),
 ]
 

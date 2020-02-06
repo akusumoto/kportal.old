@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from member.models import User
 from .models import Event, EventAnswer, EventUser
-from .serializer import EventSerializer, EventAnswerSerializer, EventUserSerializer
+from .serializer import EventSerializer, EventAnswerSerializer, EventUserSerializer, EventUserFlattenSerializer
 
 class EventViewSet(viewsets.ModelViewSet):
     """
@@ -64,9 +64,26 @@ class EventUserViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsAuthenticated,)
     queryset = EventUser.objects.all()
-    serializer_class = EventUserSerializer
+    serializer_class = EventUserFlattenSerializer
 
     def list(self, request, event_id=None):
         serializer = self.serializer_class(self.queryset.filter(event_id=event_id), many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, event_id=None, user_id=None):
+        serializer = self.serializer_class(self.queryset.get(event_id=event_id, user_id=user_id))
+        return Response(serializer.data)
+    
+    def update(self, request, event_id=None, user_id=None):
+        serializer = EventUserSerializer(self.get_object(), data=request.data)
+        if serializer.is_valid():
+            event = Event.objects.get(id=event_id)
+            user = User.objects.get(id=user_id)
+            serializer.save(event=event, user=user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, event_id=None, user_id=None):
+        serializer = self.serializer_class(self.queryset.get(event_id=event_id, user_id=user_id))
         return Response(serializer.data)
 
