@@ -37,7 +37,7 @@ class EventUserFlattenSerializer(serializers.ModelSerializer):
     #email = serializers.SerializerMethodField(read_only=True)
     nickname = serializers.SerializerMethodField(read_only=True)
     username = serializers.SerializerMethodField(read_only=True)
-    answer = serializers.SerializerMethodField()
+    answer = EventAnswerSerializer(read_only=True)
     
     class Meta:
         model = EventUser
@@ -51,11 +51,6 @@ class EventUserFlattenSerializer(serializers.ModelSerializer):
 
     def get_username(self, obj):
         return obj.user.username
-
-    def get_answer(self, obj):
-        if obj.answer:
-            return obj.answer.value
-        return None
 
 class EventSerializer(serializers.ModelSerializer):
     """

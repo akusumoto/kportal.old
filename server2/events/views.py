@@ -58,6 +58,50 @@ class EventAnswerViewSet(viewsets.ModelViewSet):
         serializer = EventAnswerSerializer(self.queryset.filter(event_id=event_id), many=True)
         return Response(serializer.data)
 
+    def create(self, request, event_id=None):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                event = Event.objects.get(id=event_id)
+            except Event.DoesNotExist:
+                return Response({"detail":"Event id={} does not exist".format(event_id)}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(event=event)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, event_id=None, pk=None):
+        try:
+            _event_answer = self.queryset.get(event_id=event_id, pk=pk)
+        except:
+            return Response({'detail':"Answer id={} does not exist in Event id={}".format(pk, event_id)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        return super(EventAnswerViewSet, self).retrieve(request, pk=pk)
+
+    def update(self, request, event_id=None, pk=None):
+        try:
+            event_answer = self.queryset.get(event_id=event_id, pk=pk)
+        except:
+            return Response({'detail':"Answer id={} does not exist in Event id={}".format(pk, event_id)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.serializer_class(event_answer, data=request.data)
+        if serializer.is_valid():
+            serializer.save(event_id=event_id)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, event_id=None, pk=None):
+        try:
+            _event_answer = self.queryset.get(event_id=event_id, pk=pk)
+        except:
+            return Response({'detail':"Answer id={} does not exist in Event id={}".format(pk, event_id)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        return super(EventAnswerViewSet, self).destroy(request, pk=pk)
+
 class EventUserViewSet(viewsets.ModelViewSet):
     """
     EventUserViewSet
@@ -69,6 +113,33 @@ class EventUserViewSet(viewsets.ModelViewSet):
     def list(self, request, event_id=None):
         serializer = self.serializer_class(self.queryset.filter(event_id=event_id), many=True)
         return Response(serializer.data)
+
+    def create(self, request, event_id=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            try:
+                event = Event.objects.get(id=event_id)
+            except Event.DoesNotExist:
+                return Response({"detail":"Event id={} does not exist".format(event_id)}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user = User.objects.get(id=request.data["id"])
+            except User.DoesNotExist:
+                return Response({"detail":"User id={} does not exist".format(request.data["id"])}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            try:
+                answer = EventAnswer.objects.get(pk=request.data['answer']['id'])
+            except EventAnswer.DoesNotExist:
+                errmsg = "Answer '{}' does not exist".format(request.data['answer']['id'])
+                return Response({"detail":errmsg},
+                                status=status.HTTP_400_BAD_REQUEST)
+            except KeyError:
+                answer = None
+            
+            serializer.save(event=event, user=user, answer=answer)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, event_id=None, user_id=None):
         serializer = self.serializer_class(self.queryset.get(event_id=event_id, user_id=user_id))
@@ -97,12 +168,13 @@ class EventUserViewSet(viewsets.ModelViewSet):
                 return Response({"detail":"User id={} does not exist".format(user_id)}, 
                                 status=status.HTTP_400_BAD_REQUEST)
             try:
-                answer = EventAnswer.objects.get(event_id=event_id,
-                                                 value=request.data['answer'])
+                answer = EventAnswer.objects.get(pk=request.data['answer']['id'])
             except EventAnswer.DoesNotExist:
-                errmsg = "Answer '{}' is not answer of the event".format(request.data['answer'])
+                errmsg = "Answer '{}' does not exist".format(request.data['answer']['id'])
                 return Response({"detail":errmsg},
                                 status=status.HTTP_400_BAD_REQUEST)
+            except KeyError:
+                answer = None
                                 
             serializer.save(event=event, user=user, answer=answer)
             return Response(serializer.data)
@@ -110,8 +182,13 @@ class EventUserViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, event_id=None, user_id=None):
-        serializer = self.serializer_class(
-                        self.queryset.get(event_id=event_id,
-                                          user_id=user_id))
-        return Response(serializer.data)
+        try:
+            event_user = self.queryset.get(event_id=event_id,
+                                           user_id=user_id)
+            event_user.delete()
+            serializer = EventUserFlattenSerializer(event_user)
+            return Response(serializer.data)
+        except EventUser.DoesNotExist:
+            errmsg = "User id={} does not belong to Event id={}".format(user_id, event_id)
+            return Response({"detail":errmsg}, status=status.HTTP_400_BAD_REQUEST)
 
