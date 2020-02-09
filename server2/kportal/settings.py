@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'member',
     'events',
+    'concerts',
     'rest_framework',
 #    'social_django',    
 ]

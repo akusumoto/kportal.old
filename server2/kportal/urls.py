@@ -27,4 +27,5 @@ urlpatterns = [
     #path('api/', include(kapi_router.urls)),
     path('member/', include('member.urls')),
     path('events/', include('events.urls')),
+    path('concerts/', include('concerts.urls')),
 ]
