@@ -28,6 +28,9 @@ class EventAnswer(models.Model):
     event = models.ForeignKey("Event", on_delete=models.CASCADE)
     value = models.CharField(max_length=100)
 
+    class Meta:
+        unique_together = (("event","value"))
+
 class EventUser(models.Model):
     """
     EventUser Model
@@ -40,3 +43,8 @@ class EventUser(models.Model):
     class Meta:
         unique_together = (("event","user"))
 
+    def __str__(self):
+        try:
+            return "{}({}) - answer={}({}) comment={}".format(self.user.name, self.user.id, self.answer.value, self.answer.id, self.comment)
+        except:
+            return "{}({}) - comment={}".format(self.user.name, self.user.id, self.comment)

@@ -75,15 +75,43 @@ class EventUserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def update(self, request, event_id=None, user_id=None):
-        serializer = EventUserSerializer(self.get_object(), data=request.data)
+        """
+        update 
+        """
+        try:
+            event_user = EventUser.objects.get(event_id=event_id, user_id=user_id)
+        except EventUser.DoesNotExist:
+            return Response({"detail":"User id={} does not belong the event".format(user_id)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer = EventUserFlattenSerializer(event_user, data=request.data)
+
         if serializer.is_valid():
-            event = Event.objects.get(id=event_id)
-            user = User.objects.get(id=user_id)
-            serializer.save(event=event, user=user)
+            try:
+                event = Event.objects.get(id=event_id)
+            except Event.DoesNotExist:
+                return Response({"detail":"Event id={} does not exist".format(event_id)}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return Response({"detail":"User id={} does not exist".format(user_id)}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            try:
+                answer = EventAnswer.objects.get(event_id=event_id,
+                                                 value=request.data['answer'])
+            except EventAnswer.DoesNotExist:
+                errmsg = "Answer '{}' is not answer of the event".format(request.data['answer'])
+                return Response({"detail":errmsg},
+                                status=status.HTTP_400_BAD_REQUEST)
+                                
+            serializer.save(event=event, user=user, answer=answer)
             return Response(serializer.data)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, event_id=None, user_id=None):
-        serializer = self.serializer_class(self.queryset.get(event_id=event_id, user_id=user_id))
+        serializer = self.serializer_class(
+                        self.queryset.get(event_id=event_id,
+                                          user_id=user_id))
         return Response(serializer.data)
 
