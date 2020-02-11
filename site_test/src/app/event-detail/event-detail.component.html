@@ -1,0 +1,11 @@
+<div *ngIf='event'>
+<h2>{{event.subject | uppercase}} Details</h2>
+<div><span>id: </span>{{event.id}} - {{id}}</div>
+<div>
+  <label>subject:
+    <input [(ngModel)]='event.subject' placeholder='subject'/>
+  </label>
+</div>
+</div>
+
+<button (click)="goBack()">go back</button>
