@@ -32,4 +32,16 @@ export class EventsComponent implements OnInit {
         .subscribe(events => this.events = events);
   }
 
+  add(subject: string,
+      date: string,
+      place: string,
+      station: string,
+      detail: string): void {
+    subject = subject.trim();
+    if(!subject) { return; }
+    this.eventService.addEvent({subject, date, place, station, detail} as Event)
+        .subscribe(event => {
+            this.events.push(event);
+        });
+  }
 }

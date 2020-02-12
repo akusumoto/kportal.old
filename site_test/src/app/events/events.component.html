@@ -8,6 +8,19 @@
 </div>
 -->
 
+<div>
+    New Event <br>
+    <label>Subject: <input #eventSubject /></label><br>
+    <label>Date: <input #eventDate /></label><br>
+    <label>Place: <input #eventPlace /></label><br>
+    <label>Station: <input #eventStation /></label><br>
+    <label>Detail: <input #eventDetail /></label><br>
+  <!-- (click) 入力値をadd()に渡したあと、入力をクリアする -->
+  <button (click)="add(eventSubject.value, eventDate.value, eventPlace.value, eventStation.value, eventDetail.value); eventSubject.value=''; eventDate.value=''; eventPlace.value=''; eventStation.value=''; eventDetail.value='';">
+    Add
+  </button>
+</div>
+
 <h2>Event List</h2>
 <ul class='events'>
 <!--

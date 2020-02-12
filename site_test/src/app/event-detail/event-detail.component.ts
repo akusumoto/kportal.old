@@ -33,4 +33,9 @@ export class EventDetailComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+
+  save(): void {
+    this.eventService.updateEvent(this.event)
+        .subscribe(() => this.goBack());
+  }
 }
